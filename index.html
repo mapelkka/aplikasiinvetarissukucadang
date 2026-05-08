@@ -17,19 +17,19 @@
             <h2>Tambah Barang Baru</h2>
             <div class="form-grid">
                 <div class="input-group">
-                    <label>Kode</label>
+                    <label for="inKode">Kode</label>
                     <input type="text" id="inKode" placeholder="Contoh: OLI-01">
                 </div>
                 <div class="input-group">
-                    <label>Nama Suku Cadang</label>
+                    <label for="inNama">Nama Suku Cadang</label>
                     <input type="text" id="inNama" placeholder="Nama barang">
                 </div>
                 <div class="input-group">
-                    <label>Stok</label>
+                    <label for="inStok">Stok</label>
                     <input type="number" id="inStok" placeholder="0">
                 </div>
                 <div class="input-group">
-                    <label>Harga</label>
+                    <label for="inHarga">Harga</label>
                     <input type="number" id="inHarga" placeholder="Rp">
                 </div>
             </div>
@@ -41,9 +41,11 @@
                 <h2>Stok Saat Ini</h2>
                 <input type="text" id="cariBarang" onkeyup="filterData()" placeholder="Cari nama barang...">
             </div>
-            <div id="loading" class="status-msg">Memuat data...</div>
+            
+            <div id="loading" class="status-msg">Memuat data dari Google Sheets...</div>
+            
             <div class="table-container">
-                <table>
+                <table id="mainTable">
                     <thead>
                         <tr>
                             <th>Kode</th>
@@ -52,11 +54,13 @@
                             <th>Harga</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody"></tbody>
+                    <tbody id="tableBody">
+                        </tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
