@@ -1,45 +1,23 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stok Suku Cadang Bengkel</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Sistem Inventaris Bengkel</h1>
-            <input type="text" id="searchInput" placeholder="Cari nama atau kode barang..." onkeyup="filterData()">
-        </header>
-    <div class="input-section">
-    <h3>Tambah Suku Cadang Baru</h3>
-    <div class="form-grid">
-        <input type="text" id="inKode" placeholder="Kode Barang">
-        <input type="text" id="inNama" placeholder="Nama Suku Cadang">
-        <input type="number" id="inStok" placeholder="Jumlah Stok">
-        <input type="text" id="inHarga" placeholder="Harga (Contoh: 50.000)">
+<div class="container">
+    <div class="card">
+        <h2>Tambah Barang</h2>
+        <div class="form-grid">
+            <input type="text" id="inKode" placeholder="Kode">
+            <input type="text" id="inNama" placeholder="Nama Suku Cadang">
+            <input type="number" id="inStok" placeholder="Stok">
+            <input type="number" id="inHarga" placeholder="Harga">
+        </div>
+        <button id="btnSimpan" onclick="tambahData()">Simpan ke Spreadsheet</button>
     </div>
-    <button onclick="tambahData()" id="btnSimpan">Simpan ke Spreadsheet</button>
+
+    <div class="card">
+        <h2>Inventaris Saat Ini</h2>
+        <div id="loading">Memuat...</div>
+        <table>
+            <thead>
+                <tr><th>Kode</th><th>Nama</th><th>Stok</th><th>Harga</th></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
 </div>
-<hr>
-        <main>
-            <table id="inventoryTable">
-                <thead>
-                    <tr>
-                        <th>Kode</th>
-                        <th>Nama Suku Cadang</th>
-                        <th>Stok</th>
-                        <th>Harga</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Data akan muncul di sini melalui JS -->
-                </tbody>
-            </table>
-            <div id="loading">Memuat data suku cadang...</div>
-        </main>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
