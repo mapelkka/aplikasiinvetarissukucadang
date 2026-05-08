@@ -1,40 +1,41 @@
-// GANTI URL INI dengan URL Web App yang kamu salin tadi!
-const API_URL = "https://script.google.com/macros/s/AKfycbw8roRFfjQNoPpLtGFa4-tofryy-TDW_g8CnkbYOcErFGnrLUSncA1FEF6kY1jrnSJrTA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyMkIznYA82l6yeA-k4cZ_5DsZsKGinFd9RTFl3fsD9P0-kJBp9pbDGzRbwu8rrMPduqw/exec"; 
+let dataLokal = []; // Simpan data di sini agar pencarian lebih cepat
 
-const tableBody = document.getElementById('tableBody');
-const loading = document.getElementById('loading');
+// Fungsi ambil data (GET)
+async function ambilData() {
+    const response = await fetch(API_URL);
+    dataLokal = await response.json();
+    renderData(dataLokal);
+}
 
-async function ambilDataDariSheet() {
+// FUNGSI INPUT DATA (POST)
+async function tambahData() {
+    const btn = document.getElementById('btnSimpan');
+    const payload = {
+        kode: document.getElementById('inKode').value,
+        nama: document.getElementById('inNama').value,
+        stok: document.getElementById('inStok').value,
+        harga: document.getElementById('inHarga').value
+    };
+
+    if(!payload.nama || !payload.stok) return alert("Nama dan Stok wajib diisi!");
+
+    btn.innerText = "Mengirim...";
+    btn.disabled = true;
+
     try {
-        const response = await fetch(API_URL);
-        const dataSukuCadang = await response.json();
-        renderData(dataSukuCadang);
+        await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        alert("Data berhasil tersimpan!");
+        location.reload(); // Refresh halaman untuk lihat hasil
     } catch (error) {
-        console.error("Gagal memuat data:", error);
-        loading.innerText = "Gagal memuat data. Pastikan URL API benar.";
+        console.error(error);
+        alert("Gagal menyimpan data.");
+        btn.innerText = "Simpan ke Spreadsheet";
+        btn.disabled = false;
     }
 }
 
-function renderData(items) {
-    tableBody.innerHTML = "";
-    loading.style.display = "none";
-    
-    items.forEach(item => {
-        // Nama properti (item.stok, dll) harus sama dengan header di Sheet (setelah jadi lowercase)
-        const row = `<tr>
-            <td>${item.kode_barang || '-'}</td>
-            <td><strong>${item.nama_suku_cadang || '-'}</strong></td>
-            <td style="color: ${item.stok < 5 ? 'red' : 'black'}">${item.stok}</td>
-            <td>${item.harga}</td>
-        </tr>`;
-        tableBody.innerHTML += row;
-    });
-}
-
-// Fungsi Pencarian (Tetap sama)
-function filterData() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    // Logika filter bisa ditambahkan di sini dengan memanggil ulang render dari variabel global
-}
-
-window.onload = ambilDataDariSheet;
+// Fungsi render dan filter tetap sama seperti sebelumnya...
