@@ -1,5 +1,5 @@
 // URL Apps Script Anda
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvB2QS-6KQ4uXY_xPONYdSBVm3W8XMxt8MPY_TbNmWEAlCyFnkTiLRGBHYyPKFhJz6mQ/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOj9wZIFQqDC2SkGW-aHgFqJ_ilK9oFZZg-Rc0Ddpha6z63IMU0h54SGR12z2oUK5sdw/exec"; 
 
 let dataStok = [];
 
