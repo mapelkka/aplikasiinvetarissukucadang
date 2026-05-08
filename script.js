@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxITkMHo83A56mVzQRM2u4pNGA4Fg51xZQQ9rBB8rAdtPlYZ1119fzbGR1cR6m46IorZw/exec"; // Ganti dengan URL /exec Anda
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ0WxLKbHBMOlU3vJreeN7rtmlPaqJupC6NBkHnXc_2aQTVt7m7KirBCMsBCVExuezZQ/exec"; // Ganti dengan URL /exec Anda
 
 document.addEventListener('DOMContentLoaded', loadData);
 
