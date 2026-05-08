@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyncAkSBHqYouEZWk721wJAhNFhJbsB8FFFa3EepsH3EfvdFaRc7uyWs99uYQiD80p0Qw/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwePvzujop-88gG0D5NirFHMEuB9x2_BkJp3Sma46RjyKkXvuhpLpTMvmeqqvJgaKGrng/exec"; 
 
 let dataStok = [];
 
