@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Suku Cadang Bengkel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistem Inventaris Bengkel</h1>
+            <input type="text" id="searchInput" placeholder="Cari nama atau kode barang..." onkeyup="filterData()">
+        </header>
+
+        <main>
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Nama Suku Cadang</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data akan muncul di sini melalui JS -->
+                </tbody>
+            </table>
+            <div id="loading">Memuat data suku cadang...</div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
