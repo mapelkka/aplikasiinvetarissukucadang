@@ -12,7 +12,17 @@
             <h1>Sistem Inventaris Bengkel</h1>
             <input type="text" id="searchInput" placeholder="Cari nama atau kode barang..." onkeyup="filterData()">
         </header>
-
+    <div class="input-section">
+    <h3>Tambah Suku Cadang Baru</h3>
+    <div class="form-grid">
+        <input type="text" id="inKode" placeholder="Kode Barang">
+        <input type="text" id="inNama" placeholder="Nama Suku Cadang">
+        <input type="number" id="inStok" placeholder="Jumlah Stok">
+        <input type="text" id="inHarga" placeholder="Harga (Contoh: 50.000)">
+    </div>
+    <button onclick="tambahData()" id="btnSimpan">Simpan ke Spreadsheet</button>
+</div>
+<hr>
         <main>
             <table id="inventoryTable">
                 <thead>
