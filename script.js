@@ -1,63 +1,85 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyR3IDvcN33XjuoZL-Rnd9bGwXLReXJtn8KB3EZChXW8pnJbMsl065gnpW_fP6uZosluQ/exec"; // Masukkan URL Deploy kamu
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxITkMHo83A56mVzQRM2u4pNGA4Fg51xZQQ9rBB8rAdtPlYZ1119fzbGR1cR6m46IorZw/exec"; // Ganti dengan URL /exec Anda
 
-// Ambil Data Saat Pertama Load
 document.addEventListener('DOMContentLoaded', loadData);
+
+let dataStok = [];
 
 async function loadData() {
     const tableBody = document.getElementById('tableBody');
     const loading = document.getElementById('loading');
     
+    loading.style.display = 'block';
+    loading.innerText = 'Memuat data terbaru...';
+    
     try {
         const response = await fetch(SCRIPT_URL);
-        const data = await response.json();
-        
-        tableBody.innerHTML = '';
-        loading.style.display = 'none';
-        
-        data.forEach(item => {
-            const row = `<tr>
-                <td>${item.kode_barang}</td>
-                <td><strong>${item.nama_suku_cadang}</strong></td>
-                <td><span class="${item.stok < 5 ? 'badge-low' : ''}">${item.stok}</span></td>
-                <td>Rp ${Number(item.harga).toLocaleString('id-ID')}</td>
-            </tr>`;
-            tableBody.innerHTML += row;
-        });
+        dataStok = await response.json();
+        renderTable(dataStok);
     } catch (e) {
-        loading.innerText = "Gagal memuat data!";
+        loading.innerText = 'Gagal mengambil data dari Google Sheets.';
+    } finally {
+        loading.style.display = 'none';
     }
+}
+
+function renderTable(data) {
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+    
+    data.forEach(item => {
+        const row = `<tr>
+            <td>${item.kode_barang || '-'}</td>
+            <td><strong>${item.nama_suku_cadang || '-'}</strong></td>
+            <td><span class="${item.stok < 5 ? 'stok-low' : ''}">${item.stok}</span></td>
+            <td>Rp ${Number(item.harga).toLocaleString('id-ID')}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+    });
 }
 
 async function tambahData() {
     const btn = document.getElementById('btnSimpan');
-    const data = {
+    const payload = {
         kode: document.getElementById('inKode').value,
         nama: document.getElementById('inNama').value,
         stok: document.getElementById('inStok').value,
         harga: document.getElementById('inHarga').value
     };
 
-    if (!data.nama || !data.stok) return alert("Isi Nama & Stok!");
+    if (!payload.nama || !payload.stok) return alert("Nama dan Stok harus diisi!");
 
-    btn.innerText = "Sedang Menyimpan...";
     btn.disabled = true;
+    btn.innerText = "Menyimpan...";
 
     try {
-        // Mengirim data menggunakan POST
         await fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Menghindari masalah CORS di browser tertentu
-            body: JSON.stringify(data)
+            mode: 'no-cors', 
+            body: JSON.stringify(payload)
         });
 
-        alert("Data Terkirim ke Spreadsheet!");
-        // Reset Form
-        document.querySelectorAll('input').forEach(i => i.value = '');
-        loadData(); // Refresh tabel
+        alert("Berhasil disimpan!");
+        // Reset form tanpa reload halaman
+        document.getElementById('inKode').value = '';
+        document.getElementById('inNama').value = '';
+        document.getElementById('inStok').value = '';
+        document.getElementById('inHarga').value = '';
+        
+        // Refresh tabel saja
+        loadData(); 
     } catch (e) {
-        alert("Terjadi kesalahan.");
+        alert("Gagal menyimpan.");
     } finally {
-        btn.innerText = "Simpan ke Spreadsheet";
         btn.disabled = false;
+        btn.innerText = "Simpan ke Spreadsheet";
     }
+}
+
+function filterData() {
+    const query = document.getElementById('cariBarang').value.toLowerCase();
+    const filtered = dataStok.filter(item => 
+        item.nama_suku_cadang.toLowerCase().includes(query) || 
+        item.kode_barang.toLowerCase().includes(query)
+    );
+    renderTable(filtered);
 }
