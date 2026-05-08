@@ -13,13 +13,15 @@ async function loadData() {
     loading.innerText = 'Memuat data terbaru...';
     
     try {
-        const response = await fetch(SCRIPT_URL);
+        // Tambahkan timestamp agar browser tidak mengambil data lama (cache)
+        const response = await fetch(`${SCRIPT_URL}?t=${new Date().getTime()}`);
         dataStok = await response.json();
         
-        console.log("Data dari Google Sheets:", dataStok); // Cek di Console (F12)
+        console.log("Data dari Google Sheets:", dataStok);
         renderTable(dataStok);
     } catch (e) {
-        loading.innerText = 'Gagal mengambil data. Pastikan Apps Script diset ke "Anyone".';
+        console.error("Error loadData:", e);
+        loading.innerText = 'Gagal mengambil data. Periksa koneksi atau URL Script.';
     } finally {
         loading.style.display = 'none';
     }
@@ -29,19 +31,23 @@ function renderTable(data) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = '';
     
+    if (!data || data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center">Data kosong atau belum sinkron</td></tr>';
+        return;
+    }
+    
     data.forEach(item => {
-        // DISESUAIKAN DENGAN NAMA KOLOM DI SPREADSHEET ANDA
-        // Google Apps Script mengubah spasi menjadi underscore secara otomatis
+        // Pastikan nama properti ini (item.nama_suku_cadang) sama dengan header di sheet (huruf kecil & spasi jadi _)
         const kode = item.kode || '-';
         const nama = item.nama_suku_cadang || '-';
-        const stok = item.stok || 0;
-        const harga = item.harga || 0;
+        const stok = parseInt(item.stok) || 0;
+        const harga = parseFloat(item.harga) || 0;
 
         const row = `<tr>
             <td>${kode}</td>
             <td><strong>${nama}</strong></td>
             <td><span class="${stok < 5 ? 'stok-low' : ''}">${stok}</span></td>
-            <td>Rp ${Number(harga).toLocaleString('id-ID')}</td>
+            <td>Rp ${harga.toLocaleString('id-ID')}</td>
         </tr>`;
         tableBody.innerHTML += row;
     });
@@ -65,18 +71,24 @@ async function tambahData() {
         await fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors', 
+            headers: { "Content-Type": "text/plain" },
             body: JSON.stringify(payload)
         });
 
-        alert("Data Berhasil Disimpan!");
+        // Karena 'no-cors', kita tidak bisa cek response.ok
+        alert("Permintaan simpan terkirim!");
+        
         // Reset Form
         document.getElementById('inKode').value = '';
         document.getElementById('inNama').value = '';
         document.getElementById('inStok').value = '';
         document.getElementById('inHarga').value = '';
         
-        loadData(); // Memuat ulang tabel
+        // Beri jeda 1.5 detik sebelum reload data agar Google Sheets selesai memproses
+        setTimeout(loadData, 1500); 
+        
     } catch (e) {
+        console.error("Error tambahData:", e);
         alert("Gagal menyimpan.");
     } finally {
         btn.disabled = false;
